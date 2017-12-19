@@ -3,11 +3,11 @@ const AWS = require('aws-sdk');
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
+exports.handler = (event, context) => {
   const res = {
     statusCode: 200,
-    headers: {}
-  }
+    headers: {},
+  };
   docClient.scan({
     TableName: 'testpipeline-hexagonal',
   }, (err, data) => {
