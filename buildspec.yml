@@ -27,7 +27,6 @@ phases:
       - aws s3 cp /tmp/userIndex.zip s3://dev-ms-api-codebuild-prototype/deploy/userIndex.zip
       - aws s3 cp ../../app.yaml s3://dev-ms-api-codebuild-prototype/deploy/app.yaml
       # - aws cloudformation delete-stack --stack-name $STACK_NAME
-      # - sleep 60
       # - aws cloudformation deploy --template-file ../../app.yaml --stack-name $STACK_NAME 
       # - aws cloudformation describe-stack-events --stack-name $STACK_NAME 
       - aws cloudformation package --template-file ../../app.yaml --s3-bucket ctx-dev-pipeline --output-template-file ../../post-app.yaml
