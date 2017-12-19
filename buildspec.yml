@@ -1,0 +1,40 @@
+version: 0.2
+
+env:
+  variables:
+    INPUT_FILE: "app.yaml"
+    OUTPUT_FILE: "post-app.yaml"
+    S3_BUCKET: "dev-ms-api-codebuild-prototype"
+
+phases:
+  install:
+    commands:
+      - pip install --upgrade awscli
+      - apt-get update
+      - apt-get -y install openssh-client
+      - cat /etc/lsb-release
+      - curl -s -O https://deb.nodesource.com/node_6.x/pool/main/n/nodejs/nodejs_6.10.0-1nodesource1~trusty1_amd64.deb
+      - dpkg -i nodejs_6.10.0-1nodesource1~trusty1_amd64.deb
+      - npm install -g n  
+      - n 6.10.0
+      - node -v
+      - npm install yarn -g 
+      - yarn install
+  build:
+    commands:
+      - yarn build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - cd ./dist/build/ ; zip /tmp/userIndex.zip userIndex.js
+      - aws s3 cp /tmp/userIndex.zip s3://dev-ms-api-codebuild-prototype/deploy/userIndex.zip
+      - aws s3 cp ../../app.yaml s3://dev-ms-api-codebuild-prototype/deploy/app.yaml
+      # - aws cloudformation delete-stack --stack-name $STACK_NAME
+      # - sleep 60
+      # - aws cloudformation deploy --template-file ../../app.yaml --stack-name $STACK_NAME 
+      # - aws cloudformation describe-stack-events --stack-name $STACK_NAME 
+      - aws cloudformation package --template $INPUT_FILE --s3-bucket $S3_BUCKET --output-template $OUTPUT_FILE
+artifacts:
+    files:
+        - post-app.yaml
+        - beta.json    
