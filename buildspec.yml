@@ -33,7 +33,7 @@ phases:
       # - sleep 60
       # - aws cloudformation deploy --template-file ../../app.yaml --stack-name $STACK_NAME 
       # - aws cloudformation describe-stack-events --stack-name $STACK_NAME 
-      - aws cloudformation package --template $INPUT_FILE --s3-bucket $S3_BUCKET --output-template $OUTPUT_FILE
+      - aws cloudformation package --template app.yaml --s3-bucket $S3_BUCKET --output-template post-app.yaml
 artifacts:
     files:
         - post-app.yaml

@@ -1,0 +1,131 @@
+Description: Authentication microservice
+Resources:
+  ApiDeployment:
+    Properties:
+      RestApiId:
+        Ref: CodeProAPI
+      StageName: dev
+    Type: AWS::ApiGateway::Deployment
+  CodeProAPI:
+    Properties:
+      Body:
+        basePath: /dev
+        definitions:
+          Order:
+            description: An order for a pets from the pet store
+            title: Pet Order
+        info:
+          title: code-prototype
+          version: '2017-05-02T08:02:03Z'
+        paths:
+          /users:
+            get:
+              produces:
+              - application/json
+              responses:
+                '200':
+                  description: 200 response
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: string
+              x-amazon-apigateway-integration:
+                contentHandling: CONVERT_TO_TEXT
+                credentials:
+                  Fn::ImportValue: roles-lambdaDynamodb
+                httpMethod: POST
+                passthroughBehavior: when_no_match
+                responses:
+                  default:
+                    statusCode: '200'
+                type: aws_proxy
+                uri:
+                  Fn::Join:
+                  - ''
+                  - - 'arn:aws:apigateway:'
+                    - Ref: AWS::Region
+                    - :lambda:path/2015-03-31/functions/
+                    - Fn::GetAtt:
+                      - userIndex
+                      - Arn
+                    - /invocations
+        schemes:
+        - https
+        securityDefinitions:
+          customAuthorizer:
+            in: header
+            name: Authorization
+            type: apiKey
+            x-amazon-apigateway-authorizer:
+              authorizerResultTtlInSeconds: 0
+              authorizerUri:
+                Fn::Join:
+                - ''
+                - - 'arn:aws:apigateway:'
+                  - Ref: AWS::Region
+                  - :lambda:path/2015-03-31/functions/
+                  - Fn::ImportValue: roles-Authorizer
+                  - /invocations
+              type: token
+            x-amazon-apigateway-authtype: custom
+        swagger: '2.0'
+      FailOnWarnings: true
+      Name: CodeProAPI
+    Type: AWS::ApiGateway::RestApi
+  access:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      - AttributeName: userId
+        AttributeType: S
+      - AttributeName: deviceId
+        AttributeType: S
+      - AttributeName: endpointArn
+        AttributeType: S
+      GlobalSecondaryIndexes:
+      - IndexName: userId
+        KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+      - IndexName: deviceId
+        KeySchema:
+        - AttributeName: deviceId
+          KeyType: HASH
+        - AttributeName: endpointArn
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 2
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: codeprototype
+    Type: AWS::DynamoDB::Table
+  userIndex:
+    Properties:
+      Code:
+        S3Bucket: dev-ms-api-codebuild-prototype
+        S3Key: deploy/userIndex.zip
+      FunctionName: codeprototype
+      Handler: userIndex.handler
+      MemorySize: 256
+      Role:
+        Fn::ImportValue: roles-lambdaDynamodb
+      Runtime: nodejs6.10
+      Tags:
+      - Key: lambda:createdBy
+        Value: SAM
+      Timeout: 30
+    Type: AWS::Lambda::Function
