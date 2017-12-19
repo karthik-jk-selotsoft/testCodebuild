@@ -4,6 +4,10 @@ const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (event, context, callback) => {
+  const res = {
+    statusCode: 200,
+    headers: {}
+  }
   docClient.scan({
     TableName: 'testpipeline-hexagonal',
   }, (err, data) => {
@@ -12,6 +16,7 @@ exports.handler = (event, context, callback) => {
     } else {
       console.log('Success', data);
     }
-    callback(null, data);
+    res.body = JSON.stringify(data);
+    context.succeed(res);
   });
 };
