@@ -1,0 +1,12 @@
+parser: babel-eslint
+extends:
+  - airbnb-base
+plugins:
+  - import
+rules:
+  import/no-unresolved: off
+  import/extensions: off
+  import/no-extraneous-dependencies: off
+  no-extend-native: off
+  consistent-return: off
+  import/no-webpack-loader-syntax: off
