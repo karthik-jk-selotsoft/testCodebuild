@@ -5,7 +5,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (event, context, callback) => {
   docClient.scan({
-    TableName: 'codeprototype',
+    TableName: 'testpipeline-hexagonal',
   }, (err, data) => {
     if (err) {
       console.log('Error', err);
