@@ -1,8 +1,5 @@
 {
     "Parameters": {
-        "env" : {
-            "Type" : "String",
-            "Default" : "testpipeline"
-        }
+        "env" :  "testpipeline"
     }
 }
