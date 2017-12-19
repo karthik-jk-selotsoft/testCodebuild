@@ -7,7 +7,7 @@ Resources:
   access:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: 'codeprototype'
+      TableName: !Sub '${env}-codeprototype'
       ProvisionedThroughput:
         WriteCapacityUnits: 2
         ReadCapacityUnits: 2
