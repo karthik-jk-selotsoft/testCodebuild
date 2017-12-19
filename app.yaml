@@ -1,4 +1,8 @@
 Description: Authentication microservice
+Parameters:
+    env:
+        Description: "environment variable"
+        Type: "String"
 Resources:
   access:
     Type: 'AWS::DynamoDB::Table'

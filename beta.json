@@ -1,5 +1,5 @@
 {
     "parameters": {
-        
+        "env": "pipeline-demo"
     }
 }
