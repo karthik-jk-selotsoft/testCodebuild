@@ -16,6 +16,7 @@ phases:
       - n 6.10.0
       - node -v
       - npm install yarn -g 
+      - npm install md5
       - yarn install
   build:
     commands:
