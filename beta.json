@@ -1,5 +1,6 @@
 {
     "Parameters": {
-        "env" :  "testpipeline"
+        "env" :  "testpipeline",
+        "checksum": "1f524f086877723aaa3b2ee2a03acb76"
     }
 }

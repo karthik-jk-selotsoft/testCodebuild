@@ -3,6 +3,9 @@ Parameters:
     env:
         Description: "environment variable"
         Type: "String"
+    checksum:
+        Description: "Checksum for the code"
+        Type: "String"
 Resources:
   access:
     Type: 'AWS::DynamoDB::Table'
@@ -53,6 +56,10 @@ Resources:
         S3Bucket: dev-ms-api-codebuild-prototype
         S3Key: deploy/userIndex.zip
       FunctionName: codeprototype
+      Environment:
+        Variables:
+          env: !Ref env
+          checksum: !Ref checksum
       Tags:
         - Value: SAM
           Key: 'lambda:createdBy'

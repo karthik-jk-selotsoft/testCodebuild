@@ -23,12 +23,15 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - cd ./dist/build/ ; zip /tmp/userIndex.zip userIndex.js
+      - cd ./dist/build/
+      - zip /tmp/userIndex.zip userIndex.js
+      - md5 /tmp/userIndex.zip
       - aws s3 cp /tmp/userIndex.zip s3://dev-ms-api-codebuild-prototype/deploy/userIndex.zip
       - aws s3 cp ../../app.yaml s3://dev-ms-api-codebuild-prototype/deploy/app.yaml
+      - cd ../../
       # - aws cloudformation deploy --template-file ../../app.yaml --stack-name $STACK_NAME 
       # - aws cloudformation describe-stack-events --stack-name $STACK_NAME 
-      - aws cloudformation package --template-file ../../app.yaml --s3-bucket ctx-dev-pipeline --output-template-file ../../post-app.yaml
+      - aws cloudformation package --template-file app.yaml --s3-bucket ctx-dev-pipeline --output-template-file post-app.yaml
 artifacts:
     files:
         - post-app.yaml
