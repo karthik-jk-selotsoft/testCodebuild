@@ -16,7 +16,6 @@ phases:
       - n 6.10.0
       - node -v
       - npm install yarn -g 
-      - npm install md5 -g
       - yarn install
   build:
     commands:
@@ -26,7 +25,7 @@ phases:
       - echo Build completed on `date`
       - cd ./dist/build/
       - zip /tmp/userIndex.zip userIndex.js
-      - md5 /tmp/userIndex.zip
+      - md5sum /tmp/userIndex.zip
       - aws s3 cp /tmp/userIndex.zip s3://dev-ms-api-codebuild-prototype/deploy/userIndex.zip
       - aws s3 cp ../../app.yaml s3://dev-ms-api-codebuild-prototype/deploy/app.yaml
       - cd ../../
