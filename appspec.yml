@@ -1,0 +1,12 @@
+version: 0.0
+Resources:
+  - userIndex:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "codeprototype"
+        Alias: "codeproto-alias"
+        CurrentVersion: "1"
+        TargetVersion: "2"
+Hooks:
+    - BeforeAllowTraffic: "LambdaFunctionToValidateBeforeTrafficShift"
+    - AfterAllowTraffic: "LambdaFunctionToValidateAfterTrafficShift"
