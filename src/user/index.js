@@ -16,6 +16,7 @@ exports.handler = (event, context) => {
     } else {
       console.log('Success', data);
     }
+    
     res.body = JSON.stringify(data);
     context.succeed(res);
   });
