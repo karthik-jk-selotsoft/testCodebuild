@@ -66,6 +66,9 @@ Resources:
       MemorySize: 256
       Handler: userIndex.handler
       Role: !ImportValue roles-lambdaDynamodb
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: AllAtOnce 
       Timeout: 30
       Runtime: nodejs6.10
   CodeProAPI:
