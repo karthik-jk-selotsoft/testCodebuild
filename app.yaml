@@ -10,7 +10,7 @@ Resources:
   pipelineHexagonal:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: !Sub '${env}-hexagonal'
+      TableName: !Sub '${env}-hexagonal-table'
       ProvisionedThroughput:
         WriteCapacityUnits: 2
         ReadCapacityUnits: 2
